@@ -13,7 +13,6 @@ namespace FinanceManager
         private DateTime BeginDate;
         private DateTime EndDate;
         private string FilePath;
-
         public void setFilePath(string filePath)
         {
             FilePath = filePath;
@@ -25,6 +24,7 @@ namespace FinanceManager
                 //
                 file.ReadLine();
                 int countOfRows = 1;
+
                 while (!file.EndOfStream)
                 {
                     string financeReportString = file.ReadLine();
@@ -39,12 +39,32 @@ namespace FinanceManager
 
                     }); 
                 }
+
+                file.Close();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
 
+        }
+
+        public void safeFile()
+        {
+            try
+            {
+                StreamWriter file = new StreamWriter(FilePath);
+                string headerString = "Description;Sum;Date;ReportType";
+                file.WriteLine(headerString);
+                FinanceReports.ForEach(fr => {
+                    file.WriteLine(fr.Description + ";" + fr.Sum + ";" + fr.Date + ";" + fr.ReportType);
+                });
+                file.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
 
         public FinanceReport GetFinanceReport(int id)

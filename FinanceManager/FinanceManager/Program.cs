@@ -8,6 +8,7 @@ namespace FinanceManager
         {
             Repository repository = new Repository();
             repository.setFilePath("test.csv");
+            repository.safeFile();
         }
     }
 }
