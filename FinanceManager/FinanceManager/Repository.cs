@@ -106,7 +106,7 @@ namespace FinanceManager
 
         public void calculateSumForDates(DateTime StartDate, DateTime EndDate)
         {
-            List<FinanceReport> financeReports = FinanceReports.FindAll( _ => _.Date.Date >= StartDate.Date && _.Date.Date <= EndDate.Date );
+            List<FinanceReport> financeReports = FinanceReports.FindAll(_ => _.Date.Date >= StartDate.Date && _.Date.Date <= EndDate.Date);
             double incomeSum = 0;
             double consumptionSum = 0;
             financeReports.ForEach(fr =>
@@ -119,10 +119,85 @@ namespace FinanceManager
                 {
                     consumptionSum += fr.Sum;
                 }
-                
+
             });
-            Console.WriteLine("Доход " + incomeSum + " Расход " + consumptionSum + " Остаток: " + (incomeSum - consumptionSum));
+            Console.WriteLine(getStringDate(StartDate) + "-" + getStringDate(EndDate) + ": Доход " + incomeSum + " Расход " + consumptionSum + " Остаток: " + (incomeSum - consumptionSum));
+        }
+        public void calculateSumForWeek()
+        {
+            DateTime StartDate = DateTime.Today;
+            DateTime EndDate = DateTime.Today;
+
+            while (StartDate.DayOfWeek != DayOfWeek.Monday || EndDate.DayOfWeek != DayOfWeek.Sunday)
+            {
+                if (StartDate.DayOfWeek != DayOfWeek.Monday)
+                {
+                    StartDate = StartDate.AddDays(-1);
+                }
+                if (EndDate.DayOfWeek != DayOfWeek.Sunday)
+                {
+                    EndDate = EndDate.AddDays(1);
+                }
+            }
+
+            Console.WriteLine();
+            List<FinanceReport> financeReports = FinanceReports.FindAll(_ => _.Date.Date >= StartDate.Date && _.Date.Date <= EndDate.Date);
+            double incomeSum = 0;
+            double consumptionSum = 0;
+            financeReports.ForEach(fr =>
+            {
+                if (fr.ReportType is FinanceReportType.INCOME)
+                {
+                    incomeSum += fr.Sum;
+                }
+                else
+                {
+                    consumptionSum += fr.Sum;
+                }
+
+            });
+            Console.WriteLine(getStringDate(StartDate) + "-" + getStringDate(EndDate) + ": Доход " + incomeSum + " Расход " + consumptionSum + " Остаток: " + (incomeSum - consumptionSum));
+        }
+        public void calculateSumForMonth()
+        {
+            DateTime StartDate = DateTime.Today;
+            DateTime EndDate = DateTime.Today;
+
+            while (StartDate.Month == StartDate.AddDays(-1).Month || EndDate.Month == EndDate.AddDays(1).Month)
+            {
+                DateTime yesterdayStartDate = StartDate.AddDays(-1);
+                DateTime tomorrowEndDate = EndDate.AddDays(1);
+                if (StartDate.Month == yesterdayStartDate.Month)
+                {
+                    StartDate = yesterdayStartDate;
+                }
+                if (EndDate.Month == tomorrowEndDate.Month)
+                {
+                    EndDate = tomorrowEndDate;
+                }
+            }
+
+            List<FinanceReport> financeReports = FinanceReports.FindAll(_ => _.Date.Date >= StartDate.Date && _.Date.Date <= EndDate.Date);
+            double incomeSum = 0;
+            double consumptionSum = 0;
+            financeReports.ForEach(fr =>
+            {
+                if (fr.ReportType is FinanceReportType.INCOME)
+                {
+                    incomeSum += fr.Sum;
+                }
+                else
+                {
+                    consumptionSum += fr.Sum;
+                }
+
+            });
+            Console.WriteLine(getStringDate(StartDate) + "-" + getStringDate(EndDate) + ": Доход " + incomeSum + " Расход " + consumptionSum + " Остаток: " + (incomeSum - consumptionSum));
         }
 
+        private string getStringDate(DateTime StartDate)
+        {
+            return StartDate.Day + "." + StartDate.Month + "." + StartDate.Year;
+        }
     }
 }

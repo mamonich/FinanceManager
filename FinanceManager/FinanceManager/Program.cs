@@ -8,7 +8,7 @@ namespace FinanceManager
         {
             Repository repository = new Repository();
             repository.setFilePath("test.csv");
-            repository.calculateSumForDates(new DateTime(2021, 12, 4), new DateTime(2021, 12, 10));
+            repository.calculateSumForMonth();
             repository.safeFile();
         }
     }
