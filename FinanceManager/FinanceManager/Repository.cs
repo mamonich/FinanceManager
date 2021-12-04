@@ -33,7 +33,8 @@ namespace FinanceManager
                         Description = frsMas[0],
                         Sum = double.Parse(frsMas[1]),
                         Date = DateTime.Parse(frsMas[2]),
-                        ReportType = frsMas[3] == "income" ? FinanceReportType.INCOME : FinanceReportType.CONSUMPTION
+                        ReportType = frsMas[3] == "income" ? FinanceReportType.INCOME : FinanceReportType.CONSUMPTION,
+                        isRealized = bool.Parse(frsMas[4])
 
                     }); 
                 }
@@ -51,7 +52,7 @@ namespace FinanceManager
             try
             {
                 StreamWriter file = new StreamWriter(FilePath);
-                string headerString = "Description;Sum;Date;ReportType";
+                string headerString = "Description;Sum;Date;ReportType;isRealized";
                 file.WriteLine(headerString);
                 FinanceReports.ForEach(fr =>
                 {
@@ -66,7 +67,7 @@ namespace FinanceManager
         }
         private string getFinanceRecordData(FinanceReport fr)
         {
-            return fr.Description + ";" + fr.Sum + ";" + fr.Date + ";" + fr.ReportType.ToString().ToLower();
+            return fr.Description + ";" + fr.Sum + ";" + fr.Date + ";" + fr.ReportType.ToString().ToLower() + ";" + fr.isRealized;
         }
         public FinanceReport GetFinanceReport(int id)
         {
@@ -103,10 +104,9 @@ namespace FinanceManager
                 Console.WriteLine("Successful changing");
             }
         }
-
         public void calculateSumForDates(DateTime StartDate, DateTime EndDate)
         {
-            List<FinanceReport> financeReports = FinanceReports.FindAll(_ => _.Date.Date >= StartDate.Date && _.Date.Date <= EndDate.Date);
+            List<FinanceReport> financeReports = FinanceReports.FindAll(_ => _.Date.Date >= StartDate.Date && _.Date.Date <= EndDate.Date && _.isRealized is true);
             double incomeSum = 0;
             double consumptionSum = 0;
             financeReports.ForEach(fr =>
@@ -141,7 +141,7 @@ namespace FinanceManager
             }
 
             Console.WriteLine();
-            List<FinanceReport> financeReports = FinanceReports.FindAll(_ => _.Date.Date >= StartDate.Date && _.Date.Date <= EndDate.Date);
+            List<FinanceReport> financeReports = FinanceReports.FindAll(_ => _.Date.Date >= StartDate.Date && _.Date.Date <= EndDate.Date && _.isRealized is true);
             double incomeSum = 0;
             double consumptionSum = 0;
             financeReports.ForEach(fr =>
@@ -177,7 +177,7 @@ namespace FinanceManager
                 }
             }
 
-            List<FinanceReport> financeReports = FinanceReports.FindAll(_ => _.Date.Date >= StartDate.Date && _.Date.Date <= EndDate.Date);
+            List<FinanceReport> financeReports = FinanceReports.FindAll(_ => _.Date.Date >= StartDate.Date && _.Date.Date <= EndDate.Date && _.isRealized is true);
             double incomeSum = 0;
             double consumptionSum = 0;
             financeReports.ForEach(fr =>
@@ -194,10 +194,9 @@ namespace FinanceManager
             });
             Console.WriteLine(getStringDate(StartDate) + "-" + getStringDate(EndDate) + ": Доход " + incomeSum + " Расход " + consumptionSum + " Остаток: " + (incomeSum - consumptionSum));
         }
-
-        private string getStringDate(DateTime StartDate)
+        private string getStringDate(DateTime Date)
         {
-            return StartDate.Day + "." + StartDate.Month + "." + StartDate.Year;
+            return Date.Day + "." + Date.Month + "." + Date.Year;
         }
     }
 }

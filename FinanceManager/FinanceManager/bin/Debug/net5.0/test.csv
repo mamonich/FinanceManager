@@ -1,11 +1,11 @@
-Description;Sum;Date;ReportType
-Description1;228;04.12.2021 0:00:00;consumption
-Description2;228;05.12.2021 0:00:00;income
-Description3;228;06.12.2021 0:00:00;consumption
-Description4;228;07.12.2021 0:00:00;income
-Description5;228;08.12.2021 0:00:00;consumption
-Description6;228;09.12.2021 0:00:00;income
-Description7;228;10.12.2021 0:00:00;consumption
-Description8;228;11.12.2021 0:00:00;income
-Description9;228;12.12.2021 0:00:00;consumption
-Description10;228;13.12.2021 0:00:00;income
+Description;Sum;Date;ReportType;isRealized
+Description1;228;04.12.2021 0:00:00;consumption;True
+Description2;228;05.12.2021 0:00:00;income;False
+Description3;228;06.12.2021 0:00:00;consumption;True
+Description4;228;07.12.2021 0:00:00;income;False
+Description5;228;08.12.2021 0:00:00;consumption;True
+Description6;228;09.12.2021 0:00:00;income;False
+Description7;228;10.12.2021 0:00:00;consumption;True
+Description8;228;11.12.2021 0:00:00;income;False
+Description9;228;12.12.2021 0:00:00;consumption;True
+Description10;228;13.12.2021 0:00:00;income;False

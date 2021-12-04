@@ -9,5 +9,6 @@ namespace FinanceManager
         public double Sum;
         public DateTime Date;
         public FinanceReportType ReportType;
+        public bool isRealized;
     }
 }
