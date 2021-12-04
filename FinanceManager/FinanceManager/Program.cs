@@ -6,10 +6,8 @@ namespace FinanceManager
     {
         static void Main(string[] args)
         {
-            Repository repository = new Repository();
-            repository.setFilePath("test.csv");
-            repository.calculateSumForMonth();
-            repository.safeFile();
+
+
         }
     }
 }

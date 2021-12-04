@@ -10,7 +10,7 @@ namespace FinanceManager
     public class Repository
     {
         private List<FinanceReport> FinanceReports = new List<FinanceReport>();
-        private string FilePath;
+        private string FilePath = "DataOfUser.csv";
         public void setFilePath(string filePath)
         {
             FilePath = filePath;
@@ -68,10 +68,6 @@ namespace FinanceManager
         private string getFinanceRecordData(FinanceReport fr)
         {
             return fr.Description + ";" + fr.Sum + ";" + fr.Date + ";" + fr.ReportType.ToString().ToLower() + ";" + fr.isRealized;
-        }
-        public FinanceReport GetFinanceReport(int id)
-        {
-            return FinanceReports.FirstOrDefault(_ => _.Id == id);
         }
         public void AddFinanceReport(FinanceReport financeReport)
         {
