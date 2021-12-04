@@ -11,7 +11,7 @@ namespace FinanceManager
     {
         private List<FinanceReport> FinanceReports = new List<FinanceReport>();
         private string FilePath = "DataOfUser.csv";
-        public void setFilePath(string filePath)
+        public void SetFilePath(string filePath)
         {
             FilePath = filePath;
             try
@@ -34,7 +34,7 @@ namespace FinanceManager
                         Sum = double.Parse(frsMas[1]),
                         Date = DateTime.Parse(frsMas[2]),
                         ReportType = frsMas[3] == "income" ? FinanceReportType.INCOME : FinanceReportType.CONSUMPTION,
-                        isRealized = bool.Parse(frsMas[4])
+                        isRealized = frsMas[4] == "да" ? true : false
 
                     }); 
                 }
@@ -47,16 +47,16 @@ namespace FinanceManager
             }
 
         }
-        public void safeFile()
+        public void SafeFile()
         {
             try
             {
                 StreamWriter file = new StreamWriter(FilePath);
-                string headerString = "Description;Sum;Date;ReportType;isRealized";
+                string headerString = "Описание;Сумма;Дата;Тип записи;учавствует ли в подсчётах(да,нет)";
                 file.WriteLine(headerString);
                 FinanceReports.ForEach(fr =>
                 {
-                    file.WriteLine(getFinanceRecordData(fr));
+                    file.WriteLine(GetFinanceRecordData(fr));
                 });
                 file.Close();
             }
@@ -65,9 +65,9 @@ namespace FinanceManager
                 Console.WriteLine(e.Message);
             }
         }
-        private string getFinanceRecordData(FinanceReport fr)
+        private string GetFinanceRecordData(FinanceReport fr)
         {
-            return fr.Description + ";" + fr.Sum + ";" + fr.Date + ";" + fr.ReportType.ToString().ToLower() + ";" + fr.isRealized;
+            return fr.Description + ";" + fr.Sum + ";" + GetStringDate(fr.Date) + ";" + fr.ReportType.ToString().ToLower() + ";" + fr.isRealized;
         }
         public void AddFinanceReport(FinanceReport financeReport)
         {
@@ -100,7 +100,7 @@ namespace FinanceManager
                 Console.WriteLine("Successful changing");
             }
         }
-        public void calculateSumForDates(DateTime StartDate, DateTime EndDate)
+        public void CalculateSumForDates(DateTime StartDate, DateTime EndDate)
         {
             List<FinanceReport> financeReports = FinanceReports.FindAll(_ => _.Date.Date >= StartDate.Date && _.Date.Date <= EndDate.Date && _.isRealized is true);
             double incomeSum = 0;
@@ -117,9 +117,9 @@ namespace FinanceManager
                 }
 
             });
-            Console.WriteLine(getStringDate(StartDate) + "-" + getStringDate(EndDate) + ": Доход " + incomeSum + " Расход " + consumptionSum + " Остаток: " + (incomeSum - consumptionSum));
+            Console.WriteLine(GetStringDate(StartDate) + "-" + GetStringDate(EndDate) + ": Доход " + incomeSum + " Расход " + consumptionSum + " Остаток: " + (incomeSum - consumptionSum));
         }
-        public void calculateSumForWeek()
+        public void CalculateSumForWeek()
         {
             DateTime StartDate = DateTime.Today;
             DateTime EndDate = DateTime.Today;
@@ -152,9 +152,9 @@ namespace FinanceManager
                 }
 
             });
-            Console.WriteLine(getStringDate(StartDate) + "-" + getStringDate(EndDate) + ": Доход " + incomeSum + " Расход " + consumptionSum + " Остаток: " + (incomeSum - consumptionSum));
+            Console.WriteLine(GetStringDate(StartDate) + "-" + GetStringDate(EndDate) + ": Доход " + incomeSum + " Расход " + consumptionSum + " Остаток: " + (incomeSum - consumptionSum));
         }
-        public void calculateSumForMonth()
+        public void CalculateSumForMonth()
         {
             DateTime StartDate = DateTime.Today;
             DateTime EndDate = DateTime.Today;
@@ -188,11 +188,15 @@ namespace FinanceManager
                 }
 
             });
-            Console.WriteLine(getStringDate(StartDate) + "-" + getStringDate(EndDate) + ": Доход " + incomeSum + " Расход " + consumptionSum + " Остаток: " + (incomeSum - consumptionSum));
+            Console.WriteLine(GetStringDate(StartDate) + "-" + GetStringDate(EndDate) + ": Доход " + incomeSum + " Расход " + consumptionSum + " Остаток: " + (incomeSum - consumptionSum));
         }
-        private string getStringDate(DateTime Date)
+        private string GetStringDate(DateTime Date)
         {
             return Date.Day + "." + Date.Month + "." + Date.Year;
+        }
+        public List<FinanceReport> GetReports()
+        {
+            return FinanceReports;
         }
     }
 }
