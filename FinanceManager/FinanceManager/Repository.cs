@@ -64,7 +64,6 @@ namespace FinanceManager
                 Console.WriteLine(e.Message);
             }
         }
-
         private string getFinanceRecordData(FinanceReport fr)
         {
             return fr.Description + ";" + fr.Sum + ";" + fr.Date + ";" + fr.ReportType.ToString().ToLower();
@@ -108,19 +107,22 @@ namespace FinanceManager
         public void calculateSumForDates(DateTime StartDate, DateTime EndDate)
         {
             List<FinanceReport> financeReports = FinanceReports.FindAll( _ => _.Date.Date >= StartDate.Date && _.Date.Date <= EndDate.Date );
-            double sum = 0;
+            double incomeSum = 0;
+            double consumptionSum = 0;
             financeReports.ForEach(fr =>
             {
-                Console.WriteLine(fr.Id + " " + getFinanceRecordData(fr));
-                double reportSum = GetReportSum(fr);
-                sum += reportSum;
+                if (fr.ReportType is FinanceReportType.INCOME)
+                {
+                    incomeSum += fr.Sum;
+                }
+                else
+                {
+                    consumptionSum += fr.Sum;
+                }
+                
             });
-            Console.WriteLine("Sum of finance reports = " + sum);
+            Console.WriteLine("Доход " + incomeSum + " Расход " + consumptionSum + " Остаток: " + (incomeSum - consumptionSum));
         }
 
-        private double GetReportSum(FinanceReport fr)
-        {
-            return fr.ReportType is FinanceReportType.INCOME ? fr.Sum : fr.Sum * -1;
-        }
     }
 }
