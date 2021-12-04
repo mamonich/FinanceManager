@@ -10,8 +10,6 @@ namespace FinanceManager
     public class Repository
     {
         private List<FinanceReport> FinanceReports = new List<FinanceReport>();
-        private DateTime BeginDate;
-        private DateTime EndDate;
         private string FilePath;
         public void setFilePath(string filePath)
         {
@@ -48,7 +46,6 @@ namespace FinanceManager
             }
 
         }
-
         public void safeFile()
         {
             try
@@ -56,8 +53,9 @@ namespace FinanceManager
                 StreamWriter file = new StreamWriter(FilePath);
                 string headerString = "Description;Sum;Date;ReportType";
                 file.WriteLine(headerString);
-                FinanceReports.ForEach(fr => {
-                    file.WriteLine(fr.Description + ";" + fr.Sum + ";" + fr.Date + ";" + fr.ReportType);
+                FinanceReports.ForEach(fr =>
+                {
+                    file.WriteLine(getFinanceRecordData(fr));
                 });
                 file.Close();
             }
@@ -67,6 +65,10 @@ namespace FinanceManager
             }
         }
 
+        private string getFinanceRecordData(FinanceReport fr)
+        {
+            return fr.Description + ";" + fr.Sum + ";" + fr.Date + ";" + fr.ReportType.ToString().ToLower();
+        }
         public FinanceReport GetFinanceReport(int id)
         {
             return FinanceReports.FirstOrDefault(_ => _.Id == id);
@@ -103,5 +105,22 @@ namespace FinanceManager
             }
         }
 
+        public void calculateSumForDates(DateTime StartDate, DateTime EndDate)
+        {
+            List<FinanceReport> financeReports = FinanceReports.FindAll( _ => _.Date.Date >= StartDate.Date && _.Date.Date <= EndDate.Date );
+            double sum = 0;
+            financeReports.ForEach(fr =>
+            {
+                Console.WriteLine(fr.Id + " " + getFinanceRecordData(fr));
+                double reportSum = GetReportSum(fr);
+                sum += reportSum;
+            });
+            Console.WriteLine("Sum of finance reports = " + sum);
+        }
+
+        private double GetReportSum(FinanceReport fr)
+        {
+            return fr.ReportType is FinanceReportType.INCOME ? fr.Sum : fr.Sum * -1;
+        }
     }
 }
