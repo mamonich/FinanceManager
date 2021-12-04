@@ -6,7 +6,8 @@ namespace FinanceManager
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Repository repository = new Repository();
+            repository.setFilePath("test.csv");
         }
     }
 }

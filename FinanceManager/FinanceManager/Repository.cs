@@ -9,33 +9,42 @@ namespace FinanceManager
 {
     public class Repository
     {
-        private List<FinanceReport> FinanceReports;
+        private List<FinanceReport> FinanceReports = new List<FinanceReport>();
         private DateTime BeginDate;
         private DateTime EndDate;
         private string FilePath;
 
-        public Repository(string filePath)
+        public void setFilePath(string filePath)
         {
             FilePath = filePath;
             try
             {
                 StreamReader file = new StreamReader(filePath);
+
+                // skip headers of .csv
+                //
+                file.ReadLine();
+                int countOfRows = 1;
+                while (!file.EndOfStream)
+                {
+                    string financeReportString = file.ReadLine();
+                    string[] frsMas = financeReportString.Split(";");
+                    FinanceReports.Add(new FinanceReport
+                    {
+                        Id = countOfRows++,
+                        Description = frsMas[0],
+                        Sum = double.Parse(frsMas[1]),
+                        Date = DateTime.Parse(frsMas[2]),
+                        ReportType = frsMas[3] == "income" ? FinanceReportType.INCOME : FinanceReportType.CONSUMPTION
+
+                    }); 
+                }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
-            for (int i = 0; i < 10; i++)
-            {
-                FinanceReports.Add(new FinanceReport
-                {
-                    Id = i,
-                    Description = "Desc" + i,
-                    Sum = (i + 2) * 10,
-                    ReportType = i % 2 == 0 ? FinanceReportType.INCOME : FinanceReportType.CONSUMPTION,
-                    Date = new DateTime().Date
-                });
-            }
+
         }
 
         public FinanceReport GetFinanceReport(int id)
@@ -69,7 +78,8 @@ namespace FinanceManager
             else
             {
                 FinanceReports.Remove(financeReport);
-                Console.WriteLine("Successful removing");
+                FinanceReports.Add(changedFinanceReport);
+                Console.WriteLine("Successful changing");
             }
         }
 
