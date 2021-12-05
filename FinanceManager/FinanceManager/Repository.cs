@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace FinanceManager
     public class Repository
     {
         private List<FinanceReport> FinanceReports = new List<FinanceReport>();
-        private string FilePath = "DataOfUser.csv";
+        private string FilePath = "test.csv";
         public void SetFilePath(string filePath)
         {
             FilePath = filePath;

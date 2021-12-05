@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,11 @@ namespace FinanceManager
     public class FinanceManager
     {
         public Repository FinanceReportRepository = new Repository();
+
+        public FinanceManager()
+        {
+            FinanceReportRepository.SetFilePath(ConfigurationManager.AppSettings["fileName"]);
+        }
 
         public void showGreeting()
         {
@@ -57,7 +63,7 @@ namespace FinanceManager
                 Description = frMas[0],
                 Sum = double.Parse(frMas[1]),
                 Date = DateTime.Parse(frMas[2]),
-                ReportType = frMas[3] == "да" ? FinanceReportType.INCOME : FinanceReportType.CONSUMPTION,
+                ReportType = frMas[3] == "income" ? FinanceReportType.INCOME : FinanceReportType.CONSUMPTION,
                 isRealized = frMas[4] == "да" ? true : false
             });
             setSpace();

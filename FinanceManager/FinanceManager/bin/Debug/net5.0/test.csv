@@ -1,5 +1,4 @@
 Описание;Сумма;Дата;Тип записи;учавствует ли в подсчётах(да,нет)
-Description2;228;5.12.2021;income;False
 Description3;228;6.12.2021;consumption;False
 Description4;228;7.12.2021;income;False
 Description5;228;8.12.2021;consumption;False
@@ -8,4 +7,5 @@ Description7;228;10.12.2021;consumption;False
 Description8;228;11.12.2021;income;False
 Description9;228;12.12.2021;consumption;False
 Description10;228;13.12.2021;income;False
-desc1;300;1.12.2021;income;True
+desc1;300;1.12.2021;income;False
+decs500;500;20.1.2021;consumption;True

@@ -42,10 +42,10 @@ namespace FinanceManager
                     case 6 :
                         financeManager.CalculateSumForMonth();
                         break;
-                    case 7:
+                    case 7 :
                         financeManager.showFinanceReports();
                         break;
-                    case 0:
+                    case 0 :
                         financeManager.FinanceReportRepository.SafeFile();
                         break;
 
