@@ -11,13 +11,11 @@ namespace FinanceManager
     public class Repository
     {
         private List<FinanceReport> FinanceReports = new List<FinanceReport>();
-        private string FilePath = "test.csv";
         public void SetFilePath(string filePath)
         {
-            FilePath = filePath;
             try
             {
-                StreamReader file = new StreamReader(filePath);
+                StreamReader file = new StreamReader(ConfigurationManager.AppSettings["filePath"]);
 
                 // skip headers of .csv
                 //
@@ -52,7 +50,7 @@ namespace FinanceManager
         {
             try
             {
-                StreamWriter file = new StreamWriter(FilePath);
+                StreamWriter file = new StreamWriter(ConfigurationManager.AppSettings["filePath"]);
                 string headerString = "Описание;Сумма;Дата;Тип записи;учавствует ли в подсчётах(да,нет)";
                 file.WriteLine(headerString);
                 FinanceReports.ForEach(fr =>

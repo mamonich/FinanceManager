@@ -12,7 +12,7 @@ namespace FinanceManager
         public Repository FinanceReportRepository = new Repository();
         public FinanceManager()
         {
-            FinanceReportRepository.SetFilePath(ConfigurationManager.AppSettings["fileName"]);
+            FinanceReportRepository.SetFilePath(ConfigurationManager.AppSettings["filePath"]);
         }
         public void showGreeting()
         {
