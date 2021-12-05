@@ -10,12 +10,10 @@ namespace FinanceManager
     public class FinanceManager
     {
         public Repository FinanceReportRepository = new Repository();
-
         public FinanceManager()
         {
             FinanceReportRepository.SetFilePath(ConfigurationManager.AppSettings["fileName"]);
         }
-
         public void showGreeting()
         {
             Console.WriteLine("Приветствуем вас, пользователь");
@@ -38,15 +36,22 @@ namespace FinanceManager
             string[] frMas = financeReportString.Split(";");
             List<FinanceReport> financeReports = FinanceReportRepository.GetReports();
             FinanceReport financeReport = financeReports.LastOrDefault();
-            FinanceReportRepository.AddFinanceReport(new FinanceReport
+            try
             {
-                Id = financeReport.Id + 1,
-                Description = frMas[0],
-                Sum = double.Parse(frMas[1]),
-                Date = DateTime.Parse(frMas[2]),
-                ReportType = frMas[3] == "income" ? FinanceReportType.INCOME : FinanceReportType.CONSUMPTION,
-                isRealized = frMas[4] == "да" ? true : false
-            });
+                FinanceReportRepository.AddFinanceReport(new FinanceReport
+                {
+                    Id = financeReport.Id + 1,
+                    Description = frMas[0],
+                    Sum = double.Parse(frMas[1]),
+                    Date = DateTime.Parse(frMas[2]),
+                    ReportType = frMas[3] == "income" ? FinanceReportType.INCOME : FinanceReportType.CONSUMPTION,
+                    isRealized = frMas[4] == "да" ? true : false
+                });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
             setSpace();
         }
         public void DeleteFinanceReport(int id)
@@ -57,20 +62,34 @@ namespace FinanceManager
         public void ChangeFinanceReport(int id, string changedFinanceReportString)
         {
             string[] frMas = changedFinanceReportString.Split(";");
-            FinanceReportRepository.ChangeFinanceReport(id, new FinanceReport
+            try
             {
-                Id = id,
-                Description = frMas[0],
-                Sum = double.Parse(frMas[1]),
-                Date = DateTime.Parse(frMas[2]),
-                ReportType = frMas[3] == "income" ? FinanceReportType.INCOME : FinanceReportType.CONSUMPTION,
-                isRealized = frMas[4] == "да" ? true : false
-            });
+                FinanceReportRepository.ChangeFinanceReport(id, new FinanceReport
+                {
+                    Id = id,
+                    Description = frMas[0],
+                    Sum = double.Parse(frMas[1]),
+                    Date = DateTime.Parse(frMas[2]),
+                    ReportType = frMas[3] == "income" ? FinanceReportType.INCOME : FinanceReportType.CONSUMPTION,
+                    isRealized = frMas[4] == "да" ? true : false
+                });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
             setSpace();
         }
         public void CalculateSumForDates(string StartDate, string EndDate)
-        {            
-            FinanceReportRepository.CalculateSumForDates(DateTime.Parse(StartDate), DateTime.Parse(EndDate));
+        {
+            try
+            {
+                FinanceReportRepository.CalculateSumForDates(DateTime.Parse(StartDate), DateTime.Parse(EndDate));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
             setSpace();
         }
         public void CalculateSumForWeek()
@@ -96,6 +115,20 @@ namespace FinanceManager
         private void setSpace()
         {
             Console.WriteLine();
+        }
+        public int GetNumberFromConsole(int numberOfChoice)
+        {
+            try
+            {
+                numberOfChoice = int.Parse(Console.ReadLine());
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine(e.Message);
+            }
+
+            return numberOfChoice;
         }
     }
 }
